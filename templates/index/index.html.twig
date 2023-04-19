@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocalizacion con OpenStreetMap</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha384-...." crossorigin=""/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js" crossorigin=""></script>
+      
+
+</head>
+  <body>   
+  
+    <div id="encabezado">
+        <h2>Geolocalizacion Ingenieria de Software</h2>
+    </div>
+
+    <form>
+        <div class="mb-3">
+            <label for="latitud" class="form-label">Latitud:</label>
+            <input type="text" id="latitud" class="form-control" name="latitud">
+           
+        </div>
+        <div id="loc" class="mb-3">
+            <label for="longitud" class="form-label">Longitud:</label>
+            <input type="text" id="longitud" class="form-control" name="longitud">
+        </div>
+      
+      <button type="button" class="btn btn-success" onclick="buscar()">Buscar</button>
+      <button type="button" class="btn btn-success" onclick="guardar()">Guardar</button>
+    </form>
+
+
+    <style>
+      table,tr,th,td{
+        border: 1px solid black;
+      }
+    </style>
+
+      <table >
+        <thead>
+          <th>Nombre</th>
+          <th>Coordenadas</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>nombre1</td>{# Ejecutar un for para cada entrada de la BDD. #}
+            <td>coordebadas1</td>{# Ejecutar un for para cada entrada de la BDD. #}
+          </tr>
+          <tr>
+            <td>nombre1</td>{# Ejecutar un for para cada entrada de la BDD. #}
+            <td>coordebadas1</td>{# Ejecutar un for para cada entrada de la BDD. #}
+          </tr>
+        </tbody>
+          
+      </table>
+    
+
+
+
+    <div id="mapa" style="max-width:50%; border:1px solid black"></div>
+
+
+    <script>
+
+        ///////////////////////////////////////////////////////////// INTEGRACION DEL MAPA
+        var mapa = L.map('mapa').setView([0, 0], 3);
+        var marcador = null;
+
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+        }).addTo(mapa);       
+
+
+
+
+        ///////////////////////////////////////////////////////////// AL HACER CLICK EN ALGUNA PARTE DEL MAPA ESCRIBE LAS COORDENADAS
+        function onMapClick(e) {
+          if (marcador) {
+            mapa.removeLayer(marcador);
+          }
+            marcador = L.marker(e.latlng).addTo(mapa);
+
+          
+          document.getElementById("latitud").value = e.latlng.lat;
+          document.getElementById("longitud").value = e.latlng.lng;
+          document.getElementById("latitud").setAttribute("value", e.latlng.lat);
+          document.getElementById("longitud").setAttribute("value", e.latlng.lng);
+        }
+          mapa.on('click', onMapClick);
+
+
+
+
+        ///////////////////////////////////////////////////////////// REVISA LAS COORDENADAS EN LOS INPUT Y MARCA EN EL MAPA
+        function buscar() {
+           
+          var latitud = parseFloat(document.getElementById("latitud").value);
+          var longitud = parseFloat(document.getElementById("longitud").value);
+
+          if (marcador !== null) {
+            mapa.removeLayer(marcador);
+          }
+
+          marcador = L.marker([latitud, longitud]).addTo(mapa);
+          mapa.setView([latitud, longitud], 13);   
+            
+        }
+
+        
+        
+        
+        ///////////////////////////////////////////////////////////// TOMA LAS COORDENADAS ESCRITAS Y LAS PERSISTE EN LA BASER DE DATOS
+        function guardar() {
+          alert("Guardado en la base de datos")
+          var latitud = parseFloat(document.getElementById("latitud").value);
+          var longitud = parseFloat(document.getElementById("longitud").value);
+
+          //////  Aca estan las variables para persistir en la base de datos. Y sea que se escriban manualmente o se eligan 
+          //////  haciendo click en el mapa. Es indistinto, porque TOMA LOS VALORES DESDE LOS INPUT.
+          var latitud
+          var longitud
+        }
+
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+
+<img src="bailey-zindel-NRQV-hBF10M-unsplash.jpg" alt="fondo-naturaleza">
+
+<header>
+<h1>Bienvenido al sistema de geolocalizacion</h1>
+</header>
+
+
+<style>
+    img{
+z-index: -1;
+max-width: 100%;
+position: absolute;
+margin: auto;
+left: 0px;
+top: 0px;}
+
+#map { 
+    height: 500px;
+    width: 700px;
+ }
+
+</style>
+
+
+<div id="map" style="height: 400px;"></div>
+
+<script>
+
+var map = L.map('map').setView([51.505, -0.09], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    maxZoom: 18,
+}).addTo(map);
+
+var popup = L.popup();
+
+var coordenadas = null;
+
+function onMapClick(e) {
+    coordenadas = e.latlng;
+    alert(coordenadas)
+}
+
+function mostrarCoordenadas() {
+    if (coordenadas !== null) {
+        alert("Coordenadas guardadas: " + coordenadas.toString());
+    } else {
+        alert("Todavía no se han guardado coordenadas.");
+    }
+}
+
+
+map.on('click', onMapClick);
+
+</script>
+
+
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    
+{% endblock %}
